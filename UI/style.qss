@@ -1,0 +1,65 @@
+/*= Style for MainWindow START
+  ==================================================== */
+#MainWindow {
+    background-color: #F5F7FA;
+}
+/*= END
+  ==================================================== */
+
+/*= Style for Logo Button START
+  ==================================================== */
+#pushButton_13 {
+    border: none;
+    icon-size: 100px 100px;
+}
+/*= END
+  ==================================================== */
+
+/*= Style for Title Label START
+  ==================================================== */
+#lb_4 {
+    color: rgb(44, 62, 80);
+    padding: 8px 16px;
+    font-size: 24px;
+    font-weight: bold;
+}
+/*= END
+  ==================================================== */
+
+/*= Style for Side Menu Buttons START
+  ==================================================== */
+#timetabebtn2, #historybtn_2, #userbtn_2, #logoutbtn_2 {
+    border: none;
+    icon-size: 100px 100px;
+}
+#timetabebtn2:checked, #historybtn_2:checked, #userbtn_2:checked, #logoutbtn_2:checked {
+    background-color: rgba(86, 101, 115, 0.3);
+}
+/*= END
+  ==================================================== */
+
+/*= Style for Header Menu Button START
+  ==================================================== */
+#menubtn {
+    border: none;
+    icon-size: 40px 40px;
+}
+/*= END
+  ==================================================== */
+
+/*= Style for Search Input and Button START
+  ==================================================== */
+#lineEdit {
+    min-height: 50px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#lineEdit:focus {
+    background-color: #70B9FE;
+}
+#findbtn {
+    border: none;
+}
+/*= END
+  ==================================================== */
