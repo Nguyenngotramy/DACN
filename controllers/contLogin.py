@@ -1,41 +1,61 @@
 import sys
 import os
+import hashlib
+from database.connBD import connectDB
+from models.Teacher import Teacher
+from models.Student import Student
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from database import connectDB
 
 class LoginController:
     def __init__(self):
-        pass  # chỗ để bạn mở rộng sau này
+        pass
+
+    # def hash_password(self, password):
+    #     """Hash the password using SHA256 for security."""
+    #     return hashlib.sha256(password.encode()).hexdigest()
 
     def login(self, email, passw):
         conn = None
         cursor = None
         try:
-            conn = connectDB.connectDB()  # gọi connectDB() trong module connectDB.py
+            # # Hash the password before checking it in the database
+            # hashed_pass = self.hash_password(passw)
+
+            conn = connectDB()
             if conn is None:
                 print("Không thể kết nối database.")
-                return False, None
+                return False, None, None
 
             cursor = conn.cursor()
 
-            user_tables = ['giang_vien', 'sinh_vien']
+            # Kiểm tra giảng viên
+            cursor.execute(
+                "SELECT ma_gv, ten_gv, Ngaysinh, sdt, password, email, khoa FROM giang_vien WHERE email = %s AND password = %s",
+                (email, passw)
+            )
+            result = cursor.fetchone()
+            if result:
+                teacher = Teacher(*result[:6], department=result[6])
+                return True, "teacher", teacher
 
-            for table in user_tables:
-                sql = f"SELECT email, password FROM {table} WHERE email = %s AND password = %s"
-                cursor.execute(sql, (email, passw))
-                user = cursor.fetchone()
-
-                if user:
-                    print(f"Đăng nhập thành công ({table}): {email}")
-                    return True, table
+            # Kiểm tra sinh viên
+            cursor.execute(
+                "SELECT Ma_sv, Ten_sv, Ngay_sinh, Sdt, password, Email, Nien_khoa, Lop_sinh_hoat, Chuyen_nganh, khoacn FROM sinh_vien WHERE Email = %s AND password = %s",
+                (email, passw)
+            )
+            result = cursor.fetchone()
+            print("Result:", result)
+            if result:
+                student = Student(*result)
+                return True, "student", student
 
             print("Email hoặc mật khẩu không đúng.")
-            return False, None
+            return False, None, None
 
         except Exception as e:
             print("Lỗi khi đăng nhập:", e)
-            return False, None
+            return False, None, None
 
         finally:
             if cursor:

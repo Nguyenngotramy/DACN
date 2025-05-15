@@ -1,22 +1,22 @@
 <RCC>
   <qresource prefix="icon">
-    <file>../icon/history.png</file>
-    <file>../icon/history1.png</file>
-    <file>../icon/list (1).png</file>
-    <file>../icon/list.png</file>
-    <file>../icon/logo_vku.jpg</file>
-    <file>../icon/logout.png</file>
-    <file>../icon/logout1.png</file>
-    <file>../icon/magnifying-glass (1).png</file>
-    <file>../icon/magnifying-glass.png</file>
-    <file>../icon/table.png</file>
-    <file>../icon/table1.png</file>
-    <file>../icon/user.png</file>
-    <file>../icon/user1.png</file>
-    <file>../icon/history.png</file>
-    <file>../icon/logo_vku.jpg</file>
-    <file>../icon/logout.png</file>
-    <file>../icon/table.png</file>
-    <file>../icon/user.png</file>
+    <file>icon/history.png</file>
+    <file>icon/history1.png</file>
+    <file>icon/list (1).png</file>
+    <file>icon/list.png</file>
+    <file>icon/logo_vku.jpg</file>
+    <file>icon/logout.png</file>
+    <file>icon/logout1.png</file>
+    <file>icon/magnifying-glass (1).png</file>
+    <file>icon/magnifying-glass.png</file>
+    <file>icon/table.png</file>
+    <file>icon/table1.png</file>
+    <file>icon/user.png</file>
+    <file>icon/user1.png</file>
+    <file>icon/history.png</file>
+    <file>icon/logo_vku.jpg</file>
+    <file>icon/logout.png</file>
+    <file>icon/table.png</file>
+    <file>icon/user.png</file>
   </qresource>
 </RCC>

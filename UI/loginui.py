@@ -13,9 +13,11 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from controllers import contLogin
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
+from home import Ui_Home
+from controllers.contHome import HomeController
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -134,9 +136,28 @@ class Ui_MainWindow(object):
     def the_button_was_clicked(self):
         print("Button clicked!")
         email = self.lineEdit_2.text()
+        print(email)
         passw = self.passw.text()
-        controller = contLogin.LoginController()
-        controller.login(email, passw)
+        print(passw)
+        # controller = contLogin.LoginController()
+        # controller.login(email, passw)
+        controller = contLogin.LoginController() 
+        success, role, user = controller.login(email, passw)
+        print( success, role, user)
+        if success:
+           print(f"Đăng nhập thành công với vai trò: {role}")
+           self.homeWindow = QtWidgets.QMainWindow()      
+           if role == "teacher":
+               self.home = Ui_Home()  # Giả sử bạn có UI dành cho giảng viên
+           elif role == "student":
+               self.home = Ui_Home()  # Giả sử bạn có UI dành cho sinh viên
+        
+           self.home.setupUi(self.homeWindow,user)             # Truyền MainWindow vào setupUi
+           self.homeWindow.show()                         # Hiện cửa sổ mới
+           self.centralwidget.window().close()                                  # Đóng cửa sổ hiện tại
+
+        else:
+            QtWidgets.QMessageBox.warning(None, "Lỗi đăng nhập", "Sai email hoặc mật khẩu.")
 
 if __name__ == "__main__":
     import sys

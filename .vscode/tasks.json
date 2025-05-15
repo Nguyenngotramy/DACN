@@ -1,0 +1,20 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compile UI/resource.qrc to UI/resource_rc.py",
+      "type": "shell",
+      "command": "${workspaceFolder}/venv/Scripts/pyrcc5.exe",
+      "args": [
+        "UI/resource.qrc",
+        "-o",
+        "UI/resource_rc.py"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}

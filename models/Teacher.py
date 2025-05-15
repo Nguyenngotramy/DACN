@@ -1,6 +1,7 @@
-from users import Users
+from .users import Users
+
 class Teacher(Users):
-    def __init__(self, id, name, dateofbirth, numphone, password, department ):
+    def __init__(self, id, name, dateofbirth, numphone, password, department):
         super().__init__(id, name, dateofbirth, numphone, password)
         self._department = department
 
