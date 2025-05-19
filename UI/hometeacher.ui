@@ -265,8 +265,8 @@ font-weight: bold; </string>
             <string>Time table</string>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/newPrefix/Documents/Python/qt5/icon/table.png</normaloff>:/newPrefix/Documents/Python/qt5/icon/table.png</iconset>
+            <iconset resource="../../../../resource.qrc">
+             <normaloff>:/newPrefix/Documents/Python/qt5/UI/icon/table.png</normaloff>:/newPrefix/Documents/Python/qt5/UI/icon/table.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -291,8 +291,8 @@ font-weight: bold; </string>
             <string>History</string>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/newPrefix/Documents/Python/qt5/icon/history.png</normaloff>:/newPrefix/Documents/Python/qt5/icon/history.png</iconset>
+            <iconset resource="../../../../resource.qrc">
+             <normaloff>:/newPrefix/Documents/Python/qt5/UI/icon/history.png</normaloff>:/newPrefix/Documents/Python/qt5/UI/icon/history.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -317,8 +317,8 @@ font-weight: bold; </string>
             <string>User</string>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/newPrefix/Documents/Python/qt5/icon/user.png</normaloff>:/newPrefix/Documents/Python/qt5/icon/user.png</iconset>
+            <iconset resource="../../../../resource.qrc">
+             <normaloff>:/newPrefix/Documents/Python/qt5/UI/icon/user.png</normaloff>:/newPrefix/Documents/Python/qt5/UI/icon/user.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -358,8 +358,8 @@ font-weight: bold; </string>
           <string>logout</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/newPrefix/Documents/Python/qt5/icon/logout.png</normaloff>:/newPrefix/Documents/Python/qt5/icon/logout.png</iconset>
+          <iconset resource="../../../../resource.qrc">
+           <normaloff>:/newPrefix/Documents/Python/qt5/UI/icon/logout.png</normaloff>:/newPrefix/Documents/Python/qt5/UI/icon/logout.png</iconset>
          </property>
          <property name="iconSize">
           <size>

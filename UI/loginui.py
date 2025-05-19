@@ -17,6 +17,7 @@ from controllers import contLogin
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from home import Ui_Home
+from hometeacher import Ui_HomeTeacher
 from controllers.contHome import HomeController
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -148,7 +149,7 @@ class Ui_MainWindow(object):
            print(f"Đăng nhập thành công với vai trò: {role}")
            self.homeWindow = QtWidgets.QMainWindow()      
            if role == "teacher":
-               self.home = Ui_Home()  # Giả sử bạn có UI dành cho giảng viên
+               self.home = Ui_HomeTeacher()  # Giả sử bạn có UI dành cho giảng viên
            elif role == "student":
                self.home = Ui_Home()  # Giả sử bạn có UI dành cho sinh viên
         
