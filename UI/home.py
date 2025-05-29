@@ -615,6 +615,7 @@ class Ui_Home(object):
         self.filterbtn.clicked.connect(self.handle_filter_btn)
         self.checkBoxAllDates.stateChanged.connect(self.toggle_date_picker)
         self.load_schedule()
+       
 
     def toggle_date_picker(self, state):
         self.dateTimeEdit.setEnabled(state != QtCore.Qt.Checked)
@@ -641,24 +642,32 @@ class Ui_Home(object):
             self.tbTodaySchedule.setItem(row, 2, QtWidgets.QTableWidgetItem(item.get_weeks()))
             self.tbTodaySchedule.setItem(row, 3, QtWidgets.QTableWidgetItem(item.get_room()))
             self.tbTodaySchedule.setItem(row, 4, QtWidgets.QTableWidgetItem(item.get_day_period()))
-            btn = QtWidgets.QPushButton("Attendance")
-            btn.setEnabled(False)
-            btn.clicked.connect(lambda _, row=row: self.handle_attendance_button_click(row))
+            self.btn = QtWidgets.QPushButton("Attendance")
+            self.btn.setEnabled(False)
+            self.btn.clicked.connect(lambda _, row=row: self.check_and_enable_checkin_button())
 
             course_id = item.get_course_title()
-            self.attendance_buttons[course_id] = btn
-            self.tbTodaySchedule.setCellWidget(row, 5, btn)
+            self.attendance_buttons[course_id] = self.btn
+            self.tbTodaySchedule.setCellWidget(row, 5, self.btn)
 
             self.tbTodaySchedule.setCellWidget(row, 5, self.btn)
-    def enable_checkin_button(self, course_id, lecture_name):
-        def update_gui():
-            btn = self.attendance_buttons.get(course_id)
-            if btn:
-                btn.setEnabled(True)
+            # Ví dụ sau khi nhận dữ liệu từ server
+           
+
+    def check_and_enable_checkin_button(self):
+        course_id, lecture_name = self.client.enable_checkin_button()
+        if course_id and lecture_name:
+            def update_gui():
+                self.btn = self.attendance_buttons.get(course_id)
+            if self.btn:
+                self.btn.setEnabled(True)
                 print(f"Nút điểm danh đã bật cho môn {course_id}")
             else:
                 print(f"Không tìm thấy nút điểm danh cho môn {course_id}")
-        QtCore.QTimer.singleShot(0, update_gui)
+            QtCore.QTimer.singleShot(0, update_gui)
+        else:
+            print("Không có thông tin môn học hoặc giảng viên để bật nút điểm danh.")
+
 
 
     def load_schedule(self):

@@ -3,10 +3,11 @@ import threading
 import json
 
 class StudentClient:
-    def __init__(self, server_ip='192.168.10.123', port=12345):
+    def __init__(self, server_ip='192.168.1.40', port=12345,gui_reference=None):
         self.server_ip = server_ip
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.gui = gui_reference
 
     def connect_to_teacher(self):
         try:
@@ -36,6 +37,10 @@ class StudentClient:
             except Exception as e:
                 print("Lỗi khi nhận dữ liệu từ server:", e)
                 break
-
     def enable_checkin_button(self, course_id, lecture_name):
-        print(f"[GUI] Nút điểm danh đã được bật cho môn {course_id}, giảng viên {lecture_name}.")
+        if course_id and lecture_name and course_id != "N/A" and lecture_name != "N/A":
+            print(f"[GUI] Nút điểm danh đã được bật cho môn {course_id}, giảng viên {lecture_name}.")
+            return course_id, lecture_name
+        else:
+            print("[GUI] Dữ liệu không hợp lệ để bật nút điểm danh.")
+            return None, None

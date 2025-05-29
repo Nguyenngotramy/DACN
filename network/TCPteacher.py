@@ -52,6 +52,7 @@ class TCPServer:
             "lecture_name": lecture_name
         }
         encoded_msg = json.dumps(message).encode()
+        print(encoded_msg)
 
         for client in self.clients:
             try:
