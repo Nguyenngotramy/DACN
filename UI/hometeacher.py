@@ -12,7 +12,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton
 from controllers.schedule_teacher_control import ScheduleController
 from addLession import AddLessionWindow
+from attendance_teacher import Attendance_MainWindow
 from controllers.addlession_control import Lession_control
+from network.TCPteacher import TCPServer
 
 
 class Ui_HomeTeacher(object):
@@ -20,6 +22,8 @@ class Ui_HomeTeacher(object):
         self.user = user
         self.schedule_controller = ScheduleController()
         self.lession_controller = Lession_control()
+        self.tcp_server = TCPServer()
+        self.tcp_server.start_server()
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1416, 862)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -701,6 +705,11 @@ class Ui_HomeTeacher(object):
         course_id = self.tableWidget.item(row, 0).text()
         lecture_name = self.tableWidget.item(row, 2).text()
         print(f"Điểm danh cho Học phần: {course_id}, Bài giảng: {lecture_name}")
+        self.tcp_server.notify_checkin_start(course_id,lecture_name)
+        self.attendanceWindow = QtWidgets.QMainWindow()
+        self.ui = Attendance_MainWindow()
+        self.ui.setupUi(self.attendanceWindow,course_id)
+        self.attendanceWindow.show()
 
     def handle_button_click(self, row, id):
         course_name = self.tbTodaySchedule.item(row, 0).text()

@@ -2,12 +2,17 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from controllers.schedule_controller import ScheduleController
 from controllers.attendance_controller import AttendanceController
+from network.TCPstudent import StudentClient
 
 class Ui_Home(object):
     def setupUi(self, MainWindow,user):
         self.user = user
         self.schedule_controller = ScheduleController()
         self.attendance_controller = AttendanceController()        
+
+        self.attendance_buttons = {}
+        self.client = StudentClient(gui_reference=self)
+        self.client.connect_to_teacher()
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1416, 862)
@@ -627,6 +632,8 @@ class Ui_Home(object):
         self.stackedWidget.setCurrentIndex(1)
     def populate_schedule_table(self, schedule):
         self.tbTodaySchedule.setRowCount(len(schedule))
+        self.attendance_buttons.clear()
+
         for row, item in enumerate(schedule):
           
             self.tbTodaySchedule.setItem(row, 0, QtWidgets.QTableWidgetItem(item.get_course_title()))
@@ -634,7 +641,25 @@ class Ui_Home(object):
             self.tbTodaySchedule.setItem(row, 2, QtWidgets.QTableWidgetItem(item.get_weeks()))
             self.tbTodaySchedule.setItem(row, 3, QtWidgets.QTableWidgetItem(item.get_room()))
             self.tbTodaySchedule.setItem(row, 4, QtWidgets.QTableWidgetItem(item.get_day_period()))
-      
+            btn = QtWidgets.QPushButton("Attendance")
+            btn.setEnabled(False)
+            btn.clicked.connect(lambda _, row=row: self.handle_attendance_button_click(row))
+
+            course_id = item.get_course_title()
+            self.attendance_buttons[course_id] = btn
+            self.tbTodaySchedule.setCellWidget(row, 5, btn)
+
+            self.tbTodaySchedule.setCellWidget(row, 5, self.btn)
+    def enable_checkin_button(self, course_id, lecture_name):
+        def update_gui():
+            btn = self.attendance_buttons.get(course_id)
+            if btn:
+                btn.setEnabled(True)
+                print(f"Nút điểm danh đã bật cho môn {course_id}")
+            else:
+                print(f"Không tìm thấy nút điểm danh cho môn {course_id}")
+        QtCore.QTimer.singleShot(0, update_gui)
+
 
     def load_schedule(self):
   
@@ -660,9 +685,6 @@ class Ui_Home(object):
             self.tbOrtherDay.setItem(row, 3, QtWidgets.QTableWidgetItem(item.get_room()))
             self.tbOrtherDay.setItem(row, 4, QtWidgets.QTableWidgetItem(item.get_day_period()))
         
-            self.btn_attendance = QtWidgets.QPushButton("Attendance")
-            self.btn_attendance.clicked.connect(lambda _, row=row: self.handle_attendance_button_click(row))
-            self.tbOrtherDay.setCellWidget(row, 6, self.btn_attendance)
 
     def populate_all_attendance(self, attendance_history):
         self.tbHistory.setRowCount(len(attendance_history))
