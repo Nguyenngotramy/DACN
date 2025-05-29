@@ -140,8 +140,6 @@ class Ui_MainWindow(object):
         print(email)
         passw = self.passw.text()
         print(passw)
-        # controller = contLogin.LoginController()
-        # controller.login(email, passw)
         controller = contLogin.LoginController() 
         success, role, user = controller.login(email, passw)
         print( success, role, user)
@@ -149,13 +147,13 @@ class Ui_MainWindow(object):
            print(f"Đăng nhập thành công với vai trò: {role}")
            self.homeWindow = QtWidgets.QMainWindow()      
            if role == "teacher":
-               self.home = Ui_HomeTeacher()  # Giả sử bạn có UI dành cho giảng viên
+               self.home = Ui_HomeTeacher() 
            elif role == "student":
-               self.home = Ui_Home()  # Giả sử bạn có UI dành cho sinh viên
+               self.home = Ui_Home()  
         
-           self.home.setupUi(self.homeWindow,user)             # Truyền MainWindow vào setupUi
-           self.homeWindow.show()                         # Hiện cửa sổ mới
-           self.centralwidget.window().close()                                  # Đóng cửa sổ hiện tại
+           self.home.setupUi(self.homeWindow,user)            
+           self.homeWindow.show()                         
+           self.centralwidget.window().close()                                 
 
         else:
             QtWidgets.QMessageBox.warning(None, "Lỗi đăng nhập", "Sai email hoặc mật khẩu.")

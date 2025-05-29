@@ -19,9 +19,6 @@ class LoginController:
         conn = None
         cursor = None
         try:
-            # # Hash the password before checking it in the database
-            # hashed_pass = self.hash_password(passw)
-
             conn = connectDB()
             if conn is None:
                 print("Không thể kết nối database.")
@@ -36,7 +33,7 @@ class LoginController:
             )
             result = cursor.fetchone()
             if result:
-                teacher = Teacher(*result[:6], department=result[6])
+                teacher = Teacher(*result)
                 return True, "teacher", teacher
 
             # Kiểm tra sinh viên

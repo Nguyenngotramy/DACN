@@ -9,10 +9,17 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QPushButton
+from controllers.schedule_teacher_control import ScheduleController
+from addLession import AddLessionWindow
+from controllers.addlession_control import Lession_control
 
 
 class Ui_HomeTeacher(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow,user):
+        self.user = user
+        self.schedule_controller = ScheduleController()
+        self.lession_controller = Lession_control()
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1416, 862)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -581,12 +588,11 @@ class Ui_HomeTeacher(object):
         item.setText(_translate("MainWindow", "Software Quality Assurance and Testing (2)"))
         self.tbOrtherDay.setSortingEnabled(__sortingEnabled)
         self.lb_7.setText(_translate("MainWindow", "User page"))
-        self.lb_9.setText(_translate("MainWindow", "Nguyen Ngo Tra My"))
-        self.TxtStudentid.setText(_translate("MainWindow", "StudentId: 22AD031"))
-        self.TxtClass.setText(_translate("MainWindow", "Class: 22AD031"))
-        self.txtAcademyYear.setText(_translate("MainWindow", "Academy Year: 22AD031"))
-        self.TxtMayor.setText(_translate("MainWindow", "Mayor: 22AD031"))
-        self.TxtFaculty.setText(_translate("MainWindow", "Faculty: 22AD031"))
+        self.lb_9.setText(_translate("MainWindow",  f"Hello, student {self.user._name}"))
+        self.TxtStudentid.setText(_translate("MainWindow", f"TeacherId: {self.user._id}"))
+        self.TxtClass.setText(_translate("MainWindow", f"number: {self.user._numphone}"))
+        self.txtAcademyYear.setText(_translate("MainWindow", f"email: {self.user._email}"))
+        self.TxtMayor.setText(_translate("MainWindow", f"department: {self.user._department}"))
         self.btnUpdateProfile.setText(_translate("MainWindow", "Update profile"))
         self.btnExtractFile.setText(_translate("MainWindow", "Extract file"))
         self.btnUpdateImag.setText(_translate("MainWindow", "Update Image"))
@@ -605,17 +611,17 @@ class Ui_HomeTeacher(object):
         self.lb_6.setText(_translate("MainWindow", "Lesson"))
         self.lb_10.setText(_translate("MainWindow", "List Student Attendanced"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "New Column"))
+        item.setText(_translate("MainWindow", "Id course"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "New Column"))
+        item.setText(_translate("MainWindow", "Course"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "New Column"))
+        item.setText(_translate("MainWindow", "Lecture"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "New Column"))
+        item.setText(_translate("MainWindow", "Date"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("MainWindow", "New Column"))
+        item.setText(_translate("MainWindow", "Start"))
         item = self.tableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("MainWindow", "New Column"))
+        item.setText(_translate("MainWindow", "New"))
         self.lb_11.setText(_translate("MainWindow", "List Lesson"))
         item = self.tbTodaySchedule_2.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Course Title"))
@@ -632,6 +638,88 @@ class Ui_HomeTeacher(object):
         item = self.tbTodaySchedule_2.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Add Lession"))
         self.logoutbtn_3.setText(_translate("MainWindow", "Add Lession"))
+        self.timetabebtn2.clicked.connect(self.handle_timetable)
+        self.timetablebtn.clicked.connect(self.handle_timetable)
+   
+        self.logoutbtn_2.clicked.connect(self.handle_logout)
+        self.logoutbtn.clicked.connect(self.handle_logout)
+        
+        self.historybtn_2.clicked.connect(self.handle_history)
+        self.historybtn.clicked.connect(self.handle_history)
+        
+        self.userbtn_2.clicked.connect(self.handle_user)
+        self.userbtn.clicked.connect(self.handle_user)
+        self.load_schedule()
+        
+    def handle_timetable(self):
+        print("Nhấn vào nút Thời khóa biểu!")
+        self.stackedWidget.setCurrentIndex(0)
+
+    def handle_logout(self):
+        print("Đăng xuất!")
+    def handle_history(self):
+        print("history")
+        self.stackedWidget.setCurrentIndex(2)
+    def handle_user(self):
+        print("Nhấn vào user")
+        self.stackedWidget.setCurrentIndex(1)
+    def populate_all_schedule_table(self, schedule):
+        self.tbOrtherDay.setRowCount(len(schedule))
+        for row, item in enumerate(schedule):
+          
+            self.tbOrtherDay.setItem(row, 0, QtWidgets.QTableWidgetItem(item.get_course_name()))
+            self.tbOrtherDay.setItem(row, 1, QtWidgets.QTableWidgetItem(item.get_room()))
+            self.tbOrtherDay.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item.get_weekday())))
+            self.tbOrtherDay.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item.get_period_count())))
+            self.tbOrtherDay.setItem(row, 4, QtWidgets.QTableWidgetItem(item.get_weeks()))
+        
+    def populate_schedule_table(self, schedule):
+        self.tbTodaySchedule.setRowCount(len(schedule))
+        for row, item in enumerate(schedule):
+          
+            self.tbTodaySchedule.setItem(row, 0, QtWidgets.QTableWidgetItem(item.get_course_name()))
+            self.tbTodaySchedule.setItem(row, 1, QtWidgets.QTableWidgetItem(item.get_room()))
+            self.tbTodaySchedule.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item.get_weekday())))
+            self.tbTodaySchedule.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item.get_period_count())))
+            self.tbTodaySchedule.setItem(row, 4, QtWidgets.QTableWidgetItem(item.get_weeks()))
+            self.tbTodaySchedule.setItem(row, 5, QtWidgets.QTableWidgetItem(item.get_weeks()))
+            btn = QtWidgets.QPushButton("Add Lesion")
+            btn.clicked.connect(lambda _, r=row: self.handle_button_click(r,item.get_id())) 
+            self.tbTodaySchedule.setCellWidget(row, 5, btn)
+    def populate_lesson_table(self, lesson):
+        self.tableWidget.setRowCount(len(lesson))
+        for row, item in enumerate(lesson):
+          
+            self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item.get_course_id())))
+            self.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(item.get_course_name()))
+            self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item.get_lecture_name())))
+            self.tableWidget.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item.get_study_date())))
+            button = QtWidgets.QPushButton("Attendance") 
+            button.clicked.connect(lambda checked, r=row: self.on_attendance_button_clicked(r))
+            self.tableWidget.setCellWidget(row, 4, button)
+    def on_attendance_button_clicked(self, row):
+        course_id = self.tableWidget.item(row, 0).text()
+        lecture_name = self.tableWidget.item(row, 2).text()
+        print(f"Điểm danh cho Học phần: {course_id}, Bài giảng: {lecture_name}")
+
+    def handle_button_click(self, row, id):
+        course_name = self.tbTodaySchedule.item(row, 0).text()
+        print(f"Đã nhấn nút Xem tuần học ở dòng {row}, môn học: {course_name}")
+        self.addLessionWindow = QtWidgets.QMainWindow()
+        self.ui = AddLessionWindow()
+        self.ui.setupUi(self.addLessionWindow,id)
+        self.addLessionWindow.show()
+   
+    def load_schedule(self):
+  
+        schedule = self.schedule_controller.get_schedule(self.user._id)
+        scheduleall = self.schedule_controller.get_all_schedule(self.user._id)
+        lesson = self.lession_controller.get_lesson_by_idteacher(self.user._id)
+        self.populate_all_schedule_table(scheduleall)
+        self.populate_schedule_table(schedule)
+        self.populate_lesson_table(lesson)
+      
+   
 import resource_rc
 
 
@@ -639,7 +727,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_HomeTeacher()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

@@ -628,12 +628,13 @@ class Ui_Home(object):
     def populate_schedule_table(self, schedule):
         self.tbTodaySchedule.setRowCount(len(schedule))
         for row, item in enumerate(schedule):
-            self.tbTodaySchedule.setItem(row, 0, QtWidgets.QTableWidgetItem(item.get_day_period()))
-            self.tbTodaySchedule.setItem(row, 1, QtWidgets.QTableWidgetItem(item.get_course_title()))
-            self.tbTodaySchedule.setItem(row, 2, QtWidgets.QTableWidgetItem(item.get_lecturer()))
+          
+            self.tbTodaySchedule.setItem(row, 0, QtWidgets.QTableWidgetItem(item.get_course_title()))
+            self.tbTodaySchedule.setItem(row, 1, QtWidgets.QTableWidgetItem(item.get_lecturer()))
+            self.tbTodaySchedule.setItem(row, 2, QtWidgets.QTableWidgetItem(item.get_weeks()))
             self.tbTodaySchedule.setItem(row, 3, QtWidgets.QTableWidgetItem(item.get_room()))
-            self.tbTodaySchedule.setItem(row, 4, QtWidgets.QTableWidgetItem(item.get_weeks()))
-            self.tbTodaySchedule.setItem(row, 5, QtWidgets.QTableWidgetItem(item.get_course_schedule()))
+            self.tbTodaySchedule.setItem(row, 4, QtWidgets.QTableWidgetItem(item.get_day_period()))
+      
 
     def load_schedule(self):
   
@@ -652,12 +653,13 @@ class Ui_Home(object):
     def populate_all_schedule_table(self, scheduleall):
         self.tbOrtherDay.setRowCount(len(scheduleall))
         for row, item in enumerate(scheduleall):
-            self.tbOrtherDay.setItem(row, 0, QtWidgets.QTableWidgetItem(item.get_day_period()))
-            self.tbOrtherDay.setItem(row, 1, QtWidgets.QTableWidgetItem(item.get_course_title()))
-            self.tbOrtherDay.setItem(row, 2, QtWidgets.QTableWidgetItem(item.get_lecturer()))
+         
+            self.tbOrtherDay.setItem(row, 0, QtWidgets.QTableWidgetItem(item.get_course_title()))
+            self.tbOrtherDay.setItem(row, 1, QtWidgets.QTableWidgetItem(item.get_lecturer()))
+            self.tbOrtherDay.setItem(row, 2, QtWidgets.QTableWidgetItem(item.get_weeks()))
             self.tbOrtherDay.setItem(row, 3, QtWidgets.QTableWidgetItem(item.get_room()))
-            self.tbOrtherDay.setItem(row, 4, QtWidgets.QTableWidgetItem(item.get_weeks()))
-            self.tbOrtherDay.setItem(row, 5, QtWidgets.QTableWidgetItem(item.get_course_schedule()))
+            self.tbOrtherDay.setItem(row, 4, QtWidgets.QTableWidgetItem(item.get_day_period()))
+        
             self.btn_attendance = QtWidgets.QPushButton("Attendance")
             self.btn_attendance.clicked.connect(lambda _, row=row: self.handle_attendance_button_click(row))
             self.tbOrtherDay.setCellWidget(row, 6, self.btn_attendance)
@@ -682,13 +684,13 @@ class Ui_Home(object):
 
     def load_courses_to_combobox(self, courses):
         self.cboxSubject.clear()
-        self.cboxSubject.addItem("All")  # Thêm tùy chọn "All"
+        self.cboxSubject.addItem("All")  
         for course in courses:
             self.cboxSubject.addItem(course)
 
     def load_status_to_combobox(self, status):
         self.cboxStatus.clear()
-        self.cboxStatus.addItem("All")  # Thêm tùy chọn "All"
+        self.cboxStatus.addItem("All")  
         for s in status:
             self.cboxStatus.addItem(s)
 
@@ -696,13 +698,13 @@ class Ui_Home(object):
         selected_subject = self.cboxSubject.currentText()
         selected_status = self.cboxStatus.currentText()
 
-    # Kiểm tra nếu checkbox "Tất cả các ngày" được chọn
+   
         if self.checkBoxAllDates.isChecked():
             selected_date = None
         else:
             selected_date = self.dateTimeEdit.dateTime().date().toString("yyyy-MM-dd")
 
-    # Lấy dữ liệu theo bộ lọc
+    
         data = self.attendance_controller.get_attendance_history_byfilter(
             student_code=self.user._id,
             subject=selected_subject,
@@ -710,7 +712,6 @@ class Ui_Home(object):
             status=selected_status
         )
 
-    # Xóa bảng cũ và hiển thị bảng mới
         self.tbHistory.setRowCount(0)
         for row_data in data:
             row_number = self.tbHistory.rowCount()

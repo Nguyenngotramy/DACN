@@ -1,8 +1,8 @@
 from .users import Users
 
 class Teacher(Users):
-    def __init__(self, id, name, dateofbirth, numphone, password, department):
-        super().__init__(id, name, dateofbirth, numphone, password)
+    def __init__(self, id, name, dateofbirth, numphone, password, email,department):
+        super().__init__(id, name, dateofbirth, numphone, password, email)
         self._department = department
 
     def get_department(self):

@@ -1,5 +1,3 @@
-# controllers/schedule_controller.py
-
 from database.connBD import connectDB
 from models.schedule_item import ScheduleItem
 
@@ -12,10 +10,11 @@ class ScheduleController:
             print("Không thể kết nối tới CSDL.")
 
     def get_today_schedule(self, student_id):
+        """Truy vấn thời khóa biểu của ngày hiện tại cho sinh viên (lọc theo ngày học phần)."""
         try:
             cursor = self.connection.cursor()
             query = """
-                SELECT 
+               SELECT 
                     hp.ten_hoc_phan,
                     gv.ten_gv,
                     tkb.tuan_hoc,
@@ -31,6 +30,7 @@ class ScheduleController:
                 WHERE 
                     sv.ma_sv = %s
                     AND tkb.thu = DAYOFWEEK(CURDATE())
+                    AND CURDATE() BETWEEN hp.ngay_bat_dau AND hp.ngay_ket_thuc
                 ORDER BY tkb.tiet_bat_dau;
             """
             print(f"Đang thực hiện truy vấn thời khóa biểu cho sinh viên mã = {student_id}")
@@ -60,17 +60,17 @@ class ScheduleController:
                 cursor.close()
 
     def get_all_schedule(self, student_id):
-        """Truy vấn toàn bộ thời khóa biểu (không giới hạn ngày) của sinh viên."""
+        """Truy vấn toàn bộ thời khóa biểu có hiệu lực cho sinh viên."""
         try:
             cursor = self.connection.cursor()
             query = """
                 SELECT 
                     hp.ten_hoc_phan,
                     gv.ten_gv,
-                    tkb.tuan_hoc,
+                    GROUP_CONCAT(DISTINCT tkb.tuan_hoc ORDER BY tkb.tuan_hoc SEPARATOR ',') AS tuan_hoc,
                     tkb.phong,
-                    CONCAT('Thứ ', tkb.thu, ' / Tiết ', tkb.tiet_bat_dau, '-', tkb.tiet_bat_dau + tkb.so_tiet - 1),
-                    CONCAT('Tiết ', tkb.tiet_bat_dau, '-', tkb.tiet_bat_dau + tkb.so_tiet - 1, ' tại ', tkb.phong)
+                    CONCAT('Thứ ', tkb.thu, ' / Tiết ', tkb.tiet_bat_dau, '-', tkb.tiet_bat_dau + MAX(tkb.so_tiet) - 1) AS day_period,
+                    CONCAT('Tiết ', tkb.tiet_bat_dau, '-', tkb.tiet_bat_dau + MAX(tkb.so_tiet) - 1, ' tại ', tkb.phong) AS course_schedule
                 FROM 
                     sinh_vien_hoc_phan svhp
                 JOIN sinh_vien sv ON svhp.id_sv = sv.id_sv
@@ -79,6 +79,9 @@ class ScheduleController:
                 JOIN thoi_khoa_bieu tkb ON hp.id_hoc_phan = tkb.id_hoc_phan
                 WHERE 
                     sv.ma_sv = %s
+                    AND CURDATE() BETWEEN hp.ngay_bat_dau AND hp.ngay_ket_thuc
+                GROUP BY 
+                    hp.ten_hoc_phan, gv.ten_gv, tkb.thu, tkb.tiet_bat_dau, tkb.phong
                 ORDER BY tkb.thu, tkb.tiet_bat_dau;
             """
             print(f"Đang thực hiện truy vấn toàn bộ thời khóa biểu cho sinh viên mã = {student_id}")

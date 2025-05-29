@@ -5,9 +5,6 @@ class ScheduleItem:
         self._weeks = weeks
         self._room = room
         self._day_period = day_period
-        self._course_schedule = course_schedule
-
-    # Getter methods
     def get_course_title(self):
         return self._course_title
 
@@ -23,10 +20,7 @@ class ScheduleItem:
     def get_day_period(self):
         return self._day_period
 
-    def get_course_schedule(self):
-        return self._course_schedule
 
-    # Setter methods
     def set_course_title(self, course_title):
         self._course_title = course_title
 
@@ -42,9 +36,3 @@ class ScheduleItem:
     def set_day_period(self, day_period):
         self._day_period = day_period
 
-    def set_course_schedule(self, course_schedule):
-        self._course_schedule = course_schedule
-
-    # Optional: to make debugging and printing easier
-    def __str__(self):
-        return f"{self._course_title} - {self._lecturer} - {self._weeks} - {self._room} - {self._day_period} - {self._course_schedule}"
